@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sleep Disorder Prediction</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function loadVisualization() {
+            fetch("/visualization")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("plot1").src = "data:image/png;base64," + data.plot_url1;
+                    document.getElementById("plot2").src = "data:image/png;base64," + data.plot_url2;
+                    document.getElementById("plot3").src = "data:image/png;base64," + data.plot_url3;
+                    document.getElementById("plot4").src = "data:image/png;base64," + data.plot_url4;
+                    document.getElementById("plot5").src = "data:image/png;base64," + data.plot_url5;
+                    document.getElementById("accuracy_plot").src = "data:image/png;base64," + data.accuracy_plot;
+                });
+        }
+
+        function classifySleepDisorder(event) {
+            event.preventDefault();
+            let formData = new FormData(document.getElementById("predictionForm"));
+            fetch("/classify", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = "<ul>";
+                for (const model in data.classification) {
+                    resultDiv.innerHTML += `<li><strong>${model}:</strong> ${data.classification[model]}</li>`;
+                }
+                resultDiv.innerHTML += "</ul>";
+
+                let recList = document.getElementById("recommendations");
+                recList.innerHTML = "";
+                data.recommendations.forEach(rec => {
+                    let li = document.createElement("li");
+                    li.innerText = rec;
+                    recList.appendChild(li);
+                });
+
+                fetch("/sleep_score", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(scoreData => {
+                    document.getElementById("sleep_score").innerText = scoreData.score;
+                });
+            });
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            margin: 0;
+            padding: 0;
+        }
+        .main-layout {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .form-panel, .result-panel {
+            flex: 1;
+            min-width: 420px;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.2), -8px -8px 16px rgba(255, 255, 255, 0.3);
+            transition: transform 0.4s ease;
+        }
+        .form-panel:hover, .result-panel:hover {
+            transform: translateY(-6px);
+        }
+        h2, h3 {
+            text-align: center;
+            color: black;
+        }
+        label, input, select, button {
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+        }
+        input, select {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.3);
+        }
+        button {
+            margin-top: 20px;
+            background: linear-gradient(145deg, #007bff, #0056b3);
+            color: white;
+            padding: 14px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        img {
+            max-width: 100%;
+            margin: 10px auto;
+            border-radius: 12px;
+            display: block;
+        }
+    </style>
+</head>
+<body onload="loadVisualization()">
+    <div class="main-layout">
+        <div class="form-panel">
+            <h2>Sleep Disorder Prediction</h2>
+            <form id="predictionForm" onsubmit="classifySleepDisorder(event)">
+                <label>Age:</label>
+                <input type="number" name="age" required>
+                <label>Gender:</label>
+                <select name="gender">
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                </select>
+                <label>Sleep Duration (hrs):</label>
+                <input type="number" step="0.1" name="sleep_duration" required>
+                <label>Stress Level (1-10):</label>
+                <input type="number" name="stress_level" required>
+                <label>BMI:</label>
+                <input type="number" name="bmi" required>
+                <label>Heart Rate:</label>
+                <input type="number" name="heart_rate" required>
+                <label>Daily Steps:</label>
+                <input type="number" name="daily_steps" required>
+                <button type="submit">Predict</button>
+            </form>
+        </div>
+
+        <div class="result-panel">
+            <h3>Sleep Score: <span id="sleep_score">--</span></h3>
+            <h3>Classification Result:</h3>
+            <div id="result"></div>
+            <h3>Recommendations:</h3>
+            <ul id="recommendations"></ul>
+            <h3>Distribution of Sleep Disorders</h3>
+            <img id="plot1" alt="Loading...">
+            <h3>Pair Plot</h3>
+            <img id="plot2" alt="Loading...">
+            <h3>Correlation Heatmap</h3>
+            <img id="plot3" alt="Loading...">
+            <h3>Violin Plot</h3>
+            <img id="plot4" alt="Loading...">
+            <h3>Sleep Duration Histogram</h3>
+            <img id="plot5" alt="Loading...">
+            <h3>Model Accuracy Comparison</h3>
+            <img id="accuracy_plot" alt="Loading...">
+        </div>
+    </div>
+</body>
+</html>

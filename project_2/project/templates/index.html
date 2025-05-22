@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Disorder Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-moon"></i>
+                <h1>SleepInsight</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}" class="active">Home</a></li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('predict') }}">Predict</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Sleep Disorder Prediction & Analysis</h2>
+                <p>Unlock insights from sleep data to identify patterns, predict disorders, and improve health outcomes.</p>
+                <div class="hero-buttons">
+                    <a href="#upload-section" class="btn primary-btn">Upload Data</a>
+                    <a href="{{ url_for('predict') }}" class="btn outline-btn">Individual Prediction</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.pexels.com/photos/3771069/pexels-photo-3771069.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Sleep analysis">
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Data Visualization</h3>
+                    <p>Interactive charts and graphs to visualize sleep patterns and identify trends across different demographics.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>ML Prediction</h3>
+                    <p>Advanced machine learning algorithms to predict sleep disorders based on various health and lifestyle factors.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Detailed Reports</h3>
+                    <p>Comprehensive reports with actionable insights for healthcare providers and insurance companies.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Patient Assessment</h3>
+                    <p>Individual patient assessment tools for personalized sleep disorder risk evaluation.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="upload-section" class="upload-section">
+            <div class="container">
+                <h2>Upload Your Data</h2>
+                <p>Upload your sleep data in CSV or Excel format to begin analysis.</p>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert {{ category }}">
+                        <p>{{ message }}</p>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+                
+                <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" class="upload-form">
+                    <div class="file-upload">
+                        <label for="file-input">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Choose a file</span>
+                        </label>
+                        <input type="file" id="file-input" name="file" accept=".csv, .xlsx, .xls">
+                        <p id="file-name">No file selected</p>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Upload & Analyze</button>
+                </form>
+                
+               
+            </div>
+        </section>
+
+        <section class="workflow">
+            <div class="container">
+                <h2>How It Works</h2>
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-number">1</div>
+                        <h3>Upload Data</h3>
+                        <p>Upload your sleep data in CSV or Excel format.</p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">2</div>
+                        <h3>Data Processing</h3>
+                        <p>We clean and analyze your data to identify patterns.</p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <h3>ML Analysis</h3>
+                        <p>Our models predict sleep disorders and identify key factors.</p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">4</div>
+                        <h3>View Results</h3>
+                        <p>Explore visualizations and predictive insights.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-moon"></i>
+                    <h3>SleepInsight</h3>
+                </div>
+                <p>&copy; 2025 SleepInsight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // File upload preview
+        document.getElementById('file-input').addEventListener('change', function() {
+            var fileName = this.files[0]?.name || 'No file selected';
+            document.getElementById('file-name').textContent = fileName;
+        });
+        
+        // Sample data generation
+        document.getElementById('generate-sample').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Sample data generation feature will be implemented here. In a production app, this would generate and download sample data.');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

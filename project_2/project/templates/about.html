@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Sleep Disorder Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-moon"></i>
+                <h1>SleepInsight</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('predict') }}">Predict</a></li>
+                    <li><a href="{{ url_for('about') }}" class="active">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="about-header">
+        <div class="container">
+            <h2>About Sleep Disorder Analysis</h2>
+            <p>Understanding our approach to sleep health and disorder prediction</p>
+        </div>
+    </section>
+
+    <section class="about-content">
+        <div class="container">
+            <div class="about-info">
+                <h3>Project Overview</h3>
+                <p>The Sleep Disorder Prediction and Analysis platform is designed to help healthcare providers and insurance companies identify individuals at risk of sleep disorders through data-driven insights and machine learning models.</p>
+                
+                <p>Sleep disorders affect millions of people worldwide, impacting physical health, mental well-being, and quality of life. Early detection and intervention can significantly improve health outcomes and reduce healthcare costs.</p>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-chart-line"></i> Data Science Approach</h4>
+                    <p>Our platform uses advanced data science techniques to analyze sleep patterns and predict disorders:</p>
+                    <ul>
+                        <li>Data Cleaning & Preprocessing</li>
+                        <li>Exploratory Data Analysis</li>
+                        <li>Feature Engineering</li>
+                        <li>Machine Learning Model Development</li>
+                        <li>Model Evaluation & Optimization</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-brain"></i> Machine Learning Models</h4>
+                    <p>We employ several machine learning algorithms to ensure accurate predictions:</p>
+                    <ul>
+                        <li>Logistic Regression</li>
+                        <li>Support Vector Machines</li>
+                        <li>Random Forest</li>
+                        <li>Gradient Boosting</li>
+                    </ul>
+                    <p>These models are trained on extensive sleep data and continuously validated to maintain high prediction accuracy.</p>
+                </div>
+            </div>
+            
+            <div class="about-methodology">
+                <h3>Our Methodology</h3>
+                
+                <div class="methodology-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Data Collection</h4>
+                        <p>We collect comprehensive sleep-related data including sleep duration, quality, physical activity, stress levels, and physiological parameters. This data forms the foundation for our analysis and predictive models.</p>
+                    </div>
+                </div>
+                
+                <div class="methodology-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Data Cleaning</h4>
+                        <p>Raw data is processed to handle missing values, remove outliers, and standardize formats. This ensures that our models are trained on high-quality, consistent data.</p>
+                    </div>
+                </div>
+                
+                <div class="methodology-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Exploratory Analysis</h4>
+                        <p>We perform comprehensive statistical analysis to understand data distributions, identify patterns, and establish correlations between various factors and sleep disorders.</p>
+                    </div>
+                </div>
+                
+                <div class="methodology-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Model Development</h4>
+                        <p>Multiple machine learning models are developed and trained on the processed data. These models learn to recognize patterns that indicate sleep disorders based on the various input features.</p>
+                    </div>
+                </div>
+                
+                <div class="methodology-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Validation & Optimization</h4>
+                        <p>Models are validated using cross-validation techniques and optimized by tuning hyperparameters to achieve the highest possible accuracy, precision, and recall.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-applications">
+                <h3>Applications</h3>
+                
+                <div class="application-cards">
+                    <div class="application-card">
+                        <div class="app-icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <h4>Healthcare Providers</h4>
+                        <p>Helps doctors identify patients at risk of sleep disorders and provide timely intervention, improving treatment outcomes and patient well-being.</p>
+                    </div>
+                    
+                    <div class="application-card">
+                        <div class="app-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <h4>Insurance Companies</h4>
+                        <p>Assists in risk assessment for potential clients, allowing for more accurate premium calculations based on sleep disorder likelihood.</p>
+                    </div>
+                    
+                    <div class="application-card">
+                        <div class="app-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4>Employee Wellness</h4>
+                        <p>Supports corporate wellness programs by identifying sleep-related issues that may affect employee health and productivity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-moon"></i>
+                    <h3>SleepInsight</h3>
+                </div>
+                <p>&copy; 2025 SleepInsight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

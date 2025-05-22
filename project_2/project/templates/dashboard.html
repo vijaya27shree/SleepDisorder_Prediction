@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sleep Disorder Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-moon"></i>
+                <h1>SleepInsight</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('dashboard') }}" class="active">Dashboard</a></li>
+                    <li><a href="{{ url_for('predict') }}">Predict</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="dashboard-header">
+        <div class="container">
+            <h2>Data Analysis Dashboard</h2>
+            <p>Explore insights from your sleep data</p>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert {{ category }}">
+                    <p>{{ message }}</p>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            
+            <div class="dashboard-actions">
+                <a href="{{ url_for('download_report') }}" class="btn outline-btn">
+                    <i class="fas fa-download"></i> Download Report
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-content">
+        <div class="container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="overview">Overview</button>
+                <button class="tab-btn" data-tab="occupation">Occupation Analysis</button>
+                <button class="tab-btn" data-tab="physical">Physical Activity</button>
+                <button class="tab-btn" data-tab="model">Model Performance</button>
+                <button class="tab-btn" data-tab="custom-viz">Visualization</button>
+
+            </div>
+            
+            <div class="tab-content active" id="overview">
+                <div class="visualization-card">
+                    <h3>Sleep Disorder Distribution</h3>
+                    <div class="visualization">
+                        {% if sleep_disorder_distribution %}
+                            <img src="data:image/png;base64,{{ sleep_disorder_distribution }}" alt="Sleep Disorder Distribution" class="viz-img">
+                        {% else %}
+                            <div class="placeholder-viz">
+                                <i class="fas fa-chart-pie"></i>
+                                <p>Sleep disorder distribution visualization</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-bed"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h4>Average Sleep Duration</h4>
+                            <p class="summary-value">7.2 hours</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h4>Average Sleep Quality</h4>
+                            <p class="summary-value">6.8 / 10</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h4>Average Stress Level</h4>
+                            <p class="summary-value">5.4 / 10</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="occupation">
+                <div class="visualization-row">
+                    <div class="visualization-card">
+                        <h3>Sleep Duration by Occupation</h3>
+                        <div class="visualization">
+                            {% if sleep_duration_by_occupation %}
+                                <img src="data:image/png;base64,{{ sleep_duration_by_occupation }}" alt="Sleep Duration by Occupation" class="viz-img">
+                            {% else %}
+                                <div class="placeholder-viz">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <p>No sleep duration data available</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="visualization-card">
+                        <h3>Sleep Quality by Occupation</h3>
+                        <div class="visualization">
+                            {% if sleep_quality_by_occupation %}
+                                <img src="data:image/png;base64,{{ sleep_quality_by_occupation }}" alt="Sleep Quality by Occupation" class="viz-img">
+                            {% else %}
+                                <div class="placeholder-viz">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <p>No sleep quality data available</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="insight-card">
+                    <h3>Key Insights</h3>
+                    <ul class="insights-list">
+                        <li>Healthcare professionals show the lowest average sleep duration</li>
+                        <li>Engineers and teachers report higher sleep quality despite varying sleep durations</li>
+                        <li>High-stress occupations correlate with lower sleep quality</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="physical">
+                <div class="visualization-card full-width">
+                    <h3>Physical Activity Impact on Sleep Quality</h3>
+                    <div class="visualization">
+                        {% if physical_activity_plot %}
+                            <img src="data:image/png;base64,{{ physical_activity_plot }}" alt="Physical Activity and Sleep Quality" class="viz-img">
+                        {% else %}
+                            <div class="placeholder-viz">
+                                <i class="fas fa-chart-line"></i>
+                                <p>No physical activity data available</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="insight-card">
+                    <h3>Physical Activity Insights</h3>
+                    <ul class="insights-list">
+                        <li>Moderate physical activity (30-60 minutes) shows optimal sleep quality improvements</li>
+                        <li>Regular physical activity correlates with reduced sleep disorder prevalence</li>
+                        <li>Excessive physical activity (>90 minutes) may not provide additional sleep benefits</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="model">
+                <div class="model-performance">
+                    <h3>Model Performance Comparison</h3>
+                    
+                    {% if results.get('model_performance') %}
+                        <div class="model-metrics">
+                            {% for model_name, metrics in results.get('model_performance', {}).items() %}
+                                {% if model_name != 'best_model' %}
+                                    <div class="model-card {% if model_name == results.get('model_performance', {}).get('best_model') %}best-model{% endif %}">
+                                        <h4>{{ model_name }}</h4>
+                                        <div class="metrics">
+                                            <div class="metric">
+                                                <span class="metric-label">Accuracy</span>
+                                                <span class="metric-value">{{ metrics.accuracy }}</span>
+                                            </div>
+                                            <div class="metric">
+                                                <span class="metric-label">Precision</span>
+                                                <span class="metric-value">{{ metrics.precision }}</span>
+                                            </div>
+                                            <div class="metric">
+                                                <span class="metric-label">Recall</span>
+                                                <span class="metric-value">{{ metrics.recall }}</span>
+                                            </div>
+                                            <div class="metric">
+                                                <span class="metric-label">F1 Score</span>
+                                                <span class="metric-value">{{ metrics.f1_score }}</span>
+                                            </div>
+                                        </div>
+                                        {% if model_name == results.get('model_performance', {}).get('best_model') %}
+                                            <div class="best-model-badge">
+                                                <i class="fas fa-trophy"></i> Best Model
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="placeholder-viz">
+                            <i class="fas fa-robot"></i>
+                            <p>No model performance data available</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="model-insight">
+                    <h3>Model Insights</h3>
+                    <p>The model identified several key factors that contribute significantly to sleep disorder prediction:</p>
+                    <ul class="model-factors">
+                        <li><span class="factor-name">Sleep Duration</span> <span class="factor-importance high">High</span></li>
+                        <li><span class="factor-name">Stress Level</span> <span class="factor-importance high">High</span></li>
+                        <li><span class="factor-name">Physical Activity</span> <span class="factor-importance medium">Medium</span></li>
+                        <li><span class="factor-name">Age</span> <span class="factor-importance medium">Medium</span></li>
+                        <li><span class="factor-name">BMI Category</span> <span class="factor-importance low">Low</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" id="custom-viz">
+            <div class="visualization-card full-width">
+                <h3>Interactive Visualization Explorer</h3>
+                <div class="visualization-controls">
+                    <label for="viz-select">Choose a plot:</label>
+                    <form method="POST">
+                        <select id="viz-select" name="viz_select" onchange="this.form.submit()">
+                            <option value="" disabled selected>Select a Plot</option>
+                            <option value="age_sleep_quality">Age vs Sleep Quality</option>
+                            <option value="stress_distribution">Stress Level Distribution</option>
+                            <option value="confusion_matrix">Confusion Matrix</option>
+                            <option value="correlation_heatmap">Correlation Heatmap</option>
+                            <option value="scree_plot">Scree Plot (PCA)</option>
+                            <option value="pair_plot">Pair Plot of Sleep Factors</option>
+                        </select>
+                    </form>
+                </div>
+                
+        
+                <div class="visualization" id="custom-viz-image">
+                    {% if user_selected_plot %}
+                        <img src="data:image/png;base64,{{ user_selected_plot }}" alt="Selected Plot" class="viz-img">
+                    {% else %}
+                        <p>No plot available or error in generating plot.</p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-moon"></i>
+                    <h3>SleepInsight</h3>
+                </div>
+               
+            </div>
+        </div>
+        
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                tabBtns.forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Hide all tab contents
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Show selected tab content
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Add animation to charts when they come into view
+        function animateOnScroll() {
+            const visualizations = document.querySelectorAll('.visualization-card');
+            
+            visualizations.forEach(viz => {
+                const rect = viz.getBoundingClientRect();
+                const isVisible = (rect.top <= window.innerHeight * 0.8);
+                
+                if (isVisible) {
+                    viz.classList.add('animate');
+                }
+            });
+        }
+        
+        // Call on load
+        window.addEventListener('DOMContentLoaded', animateOnScroll);
+        
+        // Call on scroll
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>

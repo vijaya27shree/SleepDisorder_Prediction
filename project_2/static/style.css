@@ -1,0 +1,183 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #a8dadc, #457b9d); /* Updated background gradient */
+    margin: 0;
+    padding: 0;
+    color: #1d3557; /* Darker text color */
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 40px;
+}
+
+.panel {
+    background: rgba(255, 255, 255, 0.3); /* Slightly more opaque background */
+    backdrop-filter: blur(10px);
+    border-radius: 15px; /* Slightly less rounded */
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    flex: 1;
+    min-width: 400px;
+    max-width: 600px;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease-in-out; /* Smoother animation */
+    position: relative; /* For icon positioning */
+}
+
+.panel::before {
+    content: '✨'; /* Simple sparkle icon */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2em;
+    opacity: 0.7;
+}
+
+.panel:hover {
+    transform: translateY(-8px);
+    box-shadow: 12px 12px 25px rgba(0, 0, 0, 0.15), -12px -12px 25px rgba(255, 255, 255, 0.25);
+}
+
+h2, h3 {
+    color: #1d3557;
+    text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h2::before, h3::before {
+    content: '🌙'; /* Moon icon for headings */
+    margin-right: 8px;
+    font-size: 0.9em;
+}
+
+form label {
+    display: block;
+    font-weight: 500;
+    margin: 10px 0 5px;
+    color: #457b9d;
+}
+
+form input, form select {
+    width: calc(100% - 24px); /* Adjust for padding */
+    padding: 10px;
+    border: 1px solid #a8dadc; /* Subtle border */
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.05), inset -2px -2px 4px rgba(255, 255, 255, 0.1);
+    transition: border-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+}
+
+form input:focus, form select:focus {
+    transform: scale(1.01);
+    outline: none;
+    border-color: #007bff; /* Focus border color */
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1), inset -1px -1px 3px rgba(255, 255, 255, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #457b9d, #1d3557); /* Darker button gradient */
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 17px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button::before {
+    content: '🚀'; /* Rocket icon for button */
+    margin-right: 8px;
+    font-size: 1em;
+}
+
+button:hover {
+    transform: scale(1.02);
+    background: linear-gradient(to right, #1d3557, #457b9d); /* Hover gradient */
+}
+
+img {
+    width: 100%;
+    margin: 15px 0;
+    border-radius: 10px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+img:hover {
+    transform: scale(1.01);
+}
+
+#result, #recommendations, #sleep_score {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+    box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.05), inset -1px -1px 4px rgba(255, 255, 255, 0.1);
+}
+
+#sleep_score::before {
+    content: '📊 Sleep Score: '; /* Bar chart icon */
+    font-weight: bold;
+}
+
+#result ul {
+    padding-left: 20px;
+    text-align: left;
+    list-style-type: '✅ '; /* Checkmark for list items */
+}
+
+#recommendations ul {
+    padding-left: 20px;
+    text-align: left;
+    list-style-type: '💡 '; /* Lightbulb for recommendations */
+}
+
+ul li {
+    margin-bottom: 6px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 980px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .panel {
+        max-width: 95%;
+        min-width: auto;
+    }
+}
+
+/* Logo Styling (Simple Text) */
+.logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #1d3557;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Ensure it's above other elements */
+}
+
+.logo span {
+    color: #457b9d;
+}

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - Sleep Disorder Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-moon"></i>
+                <h1>SleepInsight</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('predict') }}" class="active">Predict</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="result-header">
+        <div class="container">
+            <h2>Prediction Result</h2>
+            <p>Sleep disorder prediction based on provided information</p>
+        </div>
+    </section>
+
+    <section class="prediction-result">
+        <div class="container">
+            <div class="result-card">
+                <div class="result-status">
+                    {% if prediction == 'None' %}
+                        <div class="status-icon healthy">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>No Sleep Disorder Detected</h3>
+                    {% elif prediction == 'Insomnia' %}
+                        <div class="status-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Insomnia Risk Detected</h3>
+                    {% elif prediction == 'Sleep Apnea' %}
+                        <div class="status-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Sleep Apnea Risk Detected</h3>
+                    {% else %}
+                        <div class="status-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Sleep Disorder Risk Detected</h3>
+                    {% endif %}
+                </div>
+                
+                <div class="prediction-details">
+                    <div class="prediction-confidence">
+                        <h4>Prediction Confidence</h4>
+                        <div class="confidence-meter">
+                            <div class="confidence-bar" style="width: {% if probability %}{{ (probability * 100)|int }}%{% else %}80%{% endif %}"></div>
+                        </div>
+                        <p>{% if probability %}{{ (probability * 100)|int }}%{% else %}80%{% endif %} Confidence</p>
+                    </div>
+                    
+                    <div class="key-factors">
+                        <h4>Key Contributing Factors</h4>
+                        <ul class="factors-list">
+                            {% if input_data.get('Sleep_Duration')|float < 6 %}
+                                <li class="negative-factor">Low Sleep Duration ({{ input_data.get('Sleep_Duration') }} hours)</li>
+                            {% endif %}
+                            
+                            {% if input_data.get('Quality_of_Sleep')|int < 5 %}
+                                <li class="negative-factor">Poor Sleep Quality ({{ input_data.get('Quality_of_Sleep') }}/10)</li>
+                            {% endif %}
+                            
+                            {% if input_data.get('Stress_Level')|int > 7 %}
+                                <li class="negative-factor">High Stress Level ({{ input_data.get('Stress_Level') }}/10)</li>
+                            {% endif %}
+                            
+                            {% if input_data.get('Physical_Activity')|int < 30 %}
+                                <li class="negative-factor">Low Physical Activity ({{ input_data.get('Physical_Activity') }} min/day)</li>
+                            {% elif input_data.get('Physical_Activity')|int >= 30 %}
+                                <li class="positive-factor">Adequate Physical Activity ({{ input_data.get('Physical_Activity') }} min/day)</li>
+                            {% endif %}
+                            
+                            {% if input_data.get('BMI_Category') in ['Overweight', 'Obese'] %}
+                                <li class="negative-factor">{{ input_data.get('BMI_Category') }} BMI Category</li>
+                            {% elif input_data.get('BMI_Category') == 'Normal' %}
+                                <li class="positive-factor">Healthy BMI Category</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="recommendations">
+                    <h4>Recommendations</h4>
+                    
+                    {% if prediction == 'None' %}
+                        <p>Your sleep patterns appear to be healthy. Continue with your current habits and consider the following to maintain good sleep health:</p>
+                        <ul>
+                            <li>Maintain consistent sleep schedule</li>
+                            <li>Continue physical activity routine</li>
+                            <li>Practice good sleep hygiene</li>
+                        </ul>
+                    {% elif prediction == 'Insomnia' %}
+                        <p>Based on your profile, you show signs of potential insomnia. Consider the following recommendations:</p>
+                        <ul>
+                            <li>Establish a regular sleep schedule</li>
+                            <li>Create a relaxing bedtime routine</li>
+                            <li>Limit screen time before bed</li>
+                            <li>Practice relaxation techniques</li>
+                            <li>Consult with a healthcare provider for personalized advice</li>
+                        </ul>
+                    {% elif prediction == 'Sleep Apnea' %}
+                        <p>Your profile indicates potential risk for sleep apnea. Consider the following recommendations:</p>
+                        <ul>
+                            <li>Consult with a healthcare provider for evaluation</li>
+                            <li>Consider a sleep study for diagnosis</li>
+                            <li>Maintain a healthy weight</li>
+                            <li>Sleep on your side rather than your back</li>
+                            <li>Avoid alcohol and sedatives before bedtime</li>
+                        </ul>
+                    {% else %}
+                        <p>Your profile indicates a potential sleep disorder. Consider the following recommendations:</p>
+                        <ul>
+                            <li>Consult with a healthcare provider</li>
+                            <li>Improve sleep hygiene practices</li>
+                            <li>Maintain consistent sleep schedule</li>
+                            <li>Consider relaxation techniques before bed</li>
+                        </ul>
+                    {% endif %}
+                </div>
+                
+                <div class="result-actions">
+                    <a href="{{ url_for('predict') }}" class="btn outline-btn">Make Another Prediction</a>
+                    <a href="#" class="btn primary-btn" id="save-pdf">Save Results as PDF</a>
+                </div>
+            </div>
+            
+            <div class="input-summary">
+                <h3>Input Data Summary</h3>
+                <div class="input-grid">
+                    {% for key, value in input_data.items() %}
+                        <div class="input-item">
+                            <span class="input-label">{{ key.replace('_', ' ') }}</span>
+                            <span class="input-value">{{ value }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-moon"></i>
+                    <h3>SleepInsight</h3>
+                </div>
+                <p>&copy; 2025 SleepInsight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // PDF generation would be implemented here
+        document.getElementById('save-pdf').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('PDF generation feature will be implemented here.');
+        });
+        
+        // Add animation for the prediction result
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.querySelector('.result-card').classList.add('animate');
+            }, 300);
+        });
+    </script>
+</body>
+</html>

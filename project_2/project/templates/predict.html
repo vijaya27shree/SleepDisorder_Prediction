@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict - Sleep Disorder Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-moon"></i>
+                <h1>SleepInsight</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('predict') }}" class="active">Predict</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="predict-header">
+        <div class="container">
+            <h2>Sleep Disorder Prediction</h2>
+            <p>Enter patient information to predict sleep disorder risk</p>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert {{ category }}">
+                    <p>{{ message }}</p>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+    </section>
+
+    <section class="predict-form">
+        <div class="container">
+            <form action="{{ url_for('predict') }}" method="post" class="patient-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Gender">Gender</label>
+                        <select id="Gender" name="Gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Age">Age</label>
+                        <input type="number" id="Age" name="Age" min="18" max="100" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Occupation">Occupation</label>
+                        <select id="Occupation" name="Occupation" required>
+                            <option value="">Select Occupation</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Engineer">Engineer</option>
+                            <option value="Teacher">Teacher</option>
+                            <option value="Accountant">Accountant</option>
+                            <option value="Lawyer">Lawyer</option>
+                            <option value="Salesperson">Salesperson</option>
+                            <option value="Doctor">Doctor</option>
+                            <option value="Nurse">Nurse</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Artist">Artist</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="BMI_Category">BMI Category</label>
+                        <select id="BMI_Category" name="BMI_Category" required>
+                            <option value="">Select BMI Category</option>
+                            <option value="Underweight">Underweight</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Overweight">Overweight</option>
+                            <option value="Obese">Obese</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Sleep_Duration">Sleep Duration (hours)</label>
+                        <input type="number" id="Sleep_Duration" name="Sleep_Duration" min="0" max="24" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Quality_of_Sleep">Sleep Quality (1-10)</label>
+                        <div class="range-slider">
+                            <input type="range" id="Quality_of_Sleep" name="Quality_of_Sleep" min="1" max="10" value="5" class="slider">
+                            <span class="range-value">5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Physical_Activity">Physical Activity (minutes/day)</label>
+                        <input type="number" id="Physical_Activity" name="Physical_Activity" min="0" max="300" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Stress_Level">Stress Level (1-10)</label>
+                        <div class="range-slider">
+                            <input type="range" id="Stress_Level" name="Stress_Level" min="1" max="10" value="5" class="slider">
+                            <span class="range-value">5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Heart_Rate">Average Heart Rate (bpm)</label>
+                        <input type="number" id="Heart_Rate" name="Heart_Rate" min="40" max="200" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="Daily_Steps">Daily Steps</label>
+                        <input type="number" id="Daily_Steps" name="Daily_Steps" min="0" max="50000" required>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="reset" class="btn outline-btn">Reset</button>
+                    <button type="submit" class="btn primary-btn">Predict</button>
+                </div>
+            </form>
+            
+            <div class="predict-info">
+                <h3>How It Works</h3>
+                <p>Our prediction model uses multiple factors to assess the likelihood of sleep disorders:</p>
+                <ul>
+                    <li><span class="info-highlight">Sleep Duration & Quality:</span> Direct indicators of sleep health</li>
+                    <li><span class="info-highlight">Physical Activity:</span> Influences sleep quality and overall health</li>
+                    <li><span class="info-highlight">Stress Level:</span> High stress correlates with sleep disorders</li>
+                    <li><span class="info-highlight">BMI & Heart Rate:</span> Physical health markers that affect sleep</li>
+                </ul>
+                <p>The model analyzes these factors using machine learning algorithms trained on extensive sleep data to provide accurate predictions.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-moon"></i>
+                    <h3>SleepInsight</h3>
+                </div>
+                <p>&copy; 2025 SleepInsight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update range slider values
+        const rangeSliders = document.querySelectorAll('.range-slider input');
+        
+        rangeSliders.forEach(slider => {
+            const valueDisplay = slider.nextElementSibling;
+            
+            // Set initial value
+            valueDisplay.textContent = slider.value;
+            
+            // Update value on change
+            slider.addEventListener('input', () => {
+                valueDisplay.textContent = slider.value;
+            });
+        });
+        
+        // Form validation and enhancement
+        const form = document.querySelector('.patient-form');
+        
+        form.addEventListener('submit', (e) => {
+            let isValid = true;
+            
+            // Simple validation
+            const requiredFields = form.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    isValid = false;
+                    field.classList.add('invalid');
+                } else {
+                    field.classList.remove('invalid');
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fill all required fields');
+            }
+        });
+        
+        // Clear validation styling on input
+        form.querySelectorAll('input, select').forEach(field => {
+            field.addEventListener('input', () => {
+                field.classList.remove('invalid');
+            });
+        });
+    </script>
+</body>
+</html>
